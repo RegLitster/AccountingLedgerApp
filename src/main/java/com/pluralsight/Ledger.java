@@ -3,7 +3,9 @@ package com.pluralsight;
 import java.io.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
+
 
 //date|time|description|vendor|amount
 public class Ledger {
@@ -28,14 +30,38 @@ public class Ledger {
             System.out.println("An Unexpected Error Has Occurred " + e.getMessage());
         }
     }
+    public static List<Ledger> parseTransactions() {
+        List<Ledger> transactions = new ArrayList<>();
+        try (BufferedReader bufReader = new BufferedReader(new FileReader("src/main/resources/transactions.csv"))) {
+            String line;
+            bufReader.readLine();
 
+            while ((line = bufReader.readLine()) != null) {
+                String[] parts = line.split("\\|");
+                if (parts.length < 5) continue;
+
+                String date = parts[0].trim();
+                String time = parts[1].trim();
+                String description = parts[2].trim();
+                String vendor = parts[3].trim();
+                double amount = Double.parseDouble(parts[4].trim());
+
+                Ledger transaction = new Ledger(date, time, description, vendor, amount);
+                transactions.add(transaction);
+            }
+        } catch (IOException e) {
+            System.out.println("An Unexpected Error Has Occurred  " + e.getMessage());
+        }
+
+        return transactions;
+    }
 
     public Ledger(String date, String time, String description, String vendor, double amount) {
-        this.date = "";
-        this.time = "";
-        this.description = "";
-        this.vendor = "";
-        this.amount = 0;
+        this.date = date;
+        this.time = time;
+        this.description = description;
+        this.vendor = vendor;
+        this.amount = amount;
     }
     public String getDate() {
         return date;
