@@ -15,6 +15,11 @@ public class Ledger {
     private String vendor;
     private double amount;
 
+    public void paymentCheck(double amount){
+
+    }
+
+
     public void saveTransaction(String description, String vendor, double amount){
         LocalDateTime now = LocalDateTime.now();
         String date = now.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));

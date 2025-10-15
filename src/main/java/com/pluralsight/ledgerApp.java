@@ -84,7 +84,7 @@ public class ledgerApp {
         String selection = input.nextLine().trim().toUpperCase();
         switch (selection){
             case "A":
-         //       displayAll
+                displayAll();
             break;
             case "D":
           //      displayDeposits
@@ -95,12 +95,27 @@ public class ledgerApp {
             case "R":
            //     reports
             break;
-
+            case "H":
         }
 
     }
+    public static void displayAll(){
+        try (BufferedReader bufReader = new BufferedReader(new FileReader("src/main/resources/transactions.csv"))) {
+            String input;
+
+            while((input = bufReader.readLine()) != null) {
+                System.out.println(input);
+            }
+            System.out.println("");
+        } catch (IOException e) {
+            System.out.println("An Unexpected Error Has Occurred " + e.getMessage());
+        }
+    }
+
+    public static void displayDeposit(){
 
 
+    }
 
 
 
