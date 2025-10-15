@@ -4,10 +4,12 @@ date|time|description|vendor|amount
 2021-10-10|11:11:11|Paycheck|Company|200.00
 2023-04-15|10:13:25|ergonomic keyboard|Amazon|-89.50
 2023-04-15|11:15:00|Invoice 1001 paid|Joe|-200.00
-2025-01-10|11:57:06|PayCheck|Reggie|15000.00
-2025-08-10|11:57:27|Paycheck|Reggie|200.00
-2025-09-10|11:58:07|Paycheck|Reggie|200.00
-2025-10-10|13:43:24|debt|reggie|-200.00
+2024-10-02|13:46:28|Video Game|Steam|-20.00
+2024-12-09|17:12:00|CSGO Skin|Steam|55.00
+2025-01-10|11:57:06|PayCheck|Company|200.00
+2025-08-10|11:57:27|Paycheck|Company|200.00
+2025-09-10|11:58:07|Paycheck|Company|200.00
+2025-10-10|13:43:24|Loan Payment|BNY|-200.00
 2025-10-10|13:44:32|Credit debt|PNC|-2000.00
-2025-10-10|13:46:28|ad|ad|-200.00
-2025-10-10|14:15:23|Cash|Aaron|10.00
+2025-10-10|13:46:28|Video Game|Steam|-200.00
+2025-10-10|14:15:23|Cash Deposit|BankATM|10.00
