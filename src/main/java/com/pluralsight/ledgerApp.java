@@ -4,7 +4,6 @@ import java.io.*;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -13,12 +12,14 @@ public class ledgerApp {
         Ledger ledger = new Ledger("", "", "", "", 0);
         Scanner input = new Scanner(System.in);
         System.out.println("=====Welcome To The Ledger App=====");
-        while (true) {
-            ledgerHome(input, ledger);
-        }
+
+        ledgerHome(input, ledger);
+
     }
 
     public static void ledgerHome(Scanner input, Ledger ledger) {
+        boolean run = true;
+        while (run) {
         System.out.print("""
                 Main: Please Enter A Selection Below
                 D: Add Deposit
@@ -35,12 +36,14 @@ public class ledgerApp {
                 Payment(input, ledger);
                 break;
             case "L":
-                ledgerDisplay(input);
+                ledgerDisplay(input,ledger);
                 break;
             case "X":
+                run = false;
                 input.close();
                 System.exit(0);
                 break;
+        }
         }
     }
 
@@ -74,7 +77,9 @@ public class ledgerApp {
         ledger.saveTransaction(description, vendor, amount);
     }
 
-    public static void ledgerDisplay(Scanner input) {
+    public static void ledgerDisplay(Scanner input,Ledger ledger) {
+        boolean run = true;
+        while (run) {
         List<Ledger> transactions = Ledger.parseTransactions();
         System.out.println("""
                 Ledger: Please Make A Selection Below
@@ -96,9 +101,13 @@ public class ledgerApp {
                 displayPayments(transactions);
                 break;
             case "R":
-                reports(input);
+                reports(input,ledger);
                 break;
             case "H":
+                ledgerHome(input,ledger);
+                run = false;
+                break;
+        }
         }
     }
 
@@ -127,7 +136,9 @@ public class ledgerApp {
         System.out.println();
     }
 
-    public static void reports(Scanner input) {
+    public static void reports(Scanner input,Ledger ledger) {
+        boolean run = true;
+        while (run) {
         List<Ledger> transactions = Ledger.parseTransactions();
         System.out.println("""
                 Reports: Please Make A Selection Below
@@ -156,8 +167,10 @@ public class ledgerApp {
                 searchVendor(input, transactions);
                 break;
             case "0":
-                ledgerDisplay(input);
+                ledgerDisplay(input,ledger);
+                run = false;
                 break;
+        }
         }
     }
 
@@ -243,6 +256,7 @@ public class ledgerApp {
     public static void searchVendor(Scanner input, List<Ledger> transactions) {
         System.out.println("Please Enter Vendor: ");
         String vendorName = input.nextLine().trim().toUpperCase();
+
         for (Ledger ledger : transactions) {
             if (ledger.getVendor().toUpperCase().equals(vendorName)) {
                 System.out.println(Ledger.transactionFormater(ledger));

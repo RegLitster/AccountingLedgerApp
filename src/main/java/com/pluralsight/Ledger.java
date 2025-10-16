@@ -20,8 +20,6 @@ public class Ledger {
 
     }
 
-
-
     public void saveTransaction(String description, String vendor, double amount) {
         LocalDateTime now = LocalDateTime.now();
         String date = now.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
