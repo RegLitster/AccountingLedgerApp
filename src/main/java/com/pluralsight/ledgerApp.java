@@ -1,11 +1,10 @@
 package com.pluralsight;
 
-import org.w3c.dom.ls.LSOutput;
-
 import java.io.*;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -76,6 +75,7 @@ public class ledgerApp {
     }
 
     public static void ledgerDisplay(Scanner input) {
+        List<Ledger> transactions = Ledger.parseTransactions();
         System.out.println("""
                 Ledger: Please Make A Selection Below
                 A: Display All
@@ -87,13 +87,13 @@ public class ledgerApp {
         String selection = input.nextLine().trim().toUpperCase();
         switch (selection) {
             case "A":
-                displayAll();
+                displayAll(transactions);
                 break;
             case "D":
-                displayDeposit();
+                displayDeposit(transactions);
                 break;
             case "P":
-                displayPayments();
+                displayPayments(transactions);
                 break;
             case "R":
                 reports(input);
@@ -102,52 +102,27 @@ public class ledgerApp {
         }
     }
 
-    public static void displayAll() {
-        try (BufferedReader bufReader = new BufferedReader(new FileReader("src/main/resources/transactions.csv"))) {
-            String input;
-
-            while ((input = bufReader.readLine()) != null) {
-                System.out.println(input);
-            }
-        } catch (IOException e) {
-            System.out.println("An Unexpected Error Has Occurred " + e.getMessage());
+    public static void displayAll(List<Ledger> transactions) {
+        for (Ledger ledger : transactions) {
+            System.out.println(Ledger.transactionFormater(ledger));
         }
         System.out.println();
     }
 
-    public static void displayDeposit() {
-        try (BufferedReader bufReader = new BufferedReader(new FileReader("src/main/resources/transactions.csv"))) {
-            String line;
-            bufReader.readLine();
-
-            while ((line = bufReader.readLine()) != null) {
-                String[] parts = line.split("\\|");
-                double amount = Double.parseDouble(parts[4].trim());
-                if (amount > 0) {
-                    System.out.println(line);
-                }
-
+    public static void displayDeposit(List<Ledger> transactions) {
+        for (Ledger ledger : transactions) {
+            if (ledger.getAmount() > 0) {
+                System.out.println(Ledger.transactionFormater(ledger));
             }
-        } catch (IOException e) {
-            System.out.println("An error occurred while reading deposits: " + e.getMessage());
         }
         System.out.println();
     }
 
-    public static void displayPayments() {
-        try (BufferedReader bufReader = new BufferedReader(new FileReader("src/main/resources/transactions.csv"))) {
-            String line;
-            bufReader.readLine();
-
-            while ((line = bufReader.readLine()) != null) {
-                String[] parts = line.split("\\|");
-                double amount = Double.parseDouble(parts[4].trim());
-                if (amount < 0) {
-                    System.out.println(line);
-                }
+    public static void displayPayments(List<Ledger> transactions) {
+        for (Ledger ledger : transactions) {
+            if (ledger.getAmount() < 0) {
+                System.out.println(Ledger.transactionFormater(ledger));
             }
-        } catch (IOException e) {
-            System.out.println("An error occurred while reading payments: " + e.getMessage());
         }
         System.out.println();
     }
@@ -196,7 +171,7 @@ public class ledgerApp {
 
                 if (transactionDate.getYear() == today.getYear() &&
                         transactionDate.getMonth() == today.getMonth()) {
-                    System.out.println(ledger.getDate() + " | " + ledger.getTime() + " | " + ledger.getDescription() + " | " + ledger.getVendor() + " | " + ledger.getAmount());
+                    System.out.println(Ledger.transactionFormater(ledger));
                 }
             } catch (Exception e) {
                 System.out.println("An Unexpected Error Has Occurred " + e.getMessage());
@@ -217,7 +192,7 @@ public class ledgerApp {
                 LocalDate transactionDate = LocalDate.parse(ledger.getDate(), formatter);
 
                 if (!transactionDate.isBefore(startDate) && !transactionDate.isAfter(endDate)) {
-                    System.out.println(ledger.getDate() + " | " + ledger.getTime() + " | " + ledger.getDescription() + " | " + ledger.getVendor() + " | " + ledger.getAmount());
+                    System.out.println(Ledger.transactionFormater(ledger));
                 }
             } catch (Exception e) {
                 System.out.println("An Unexpected Error Has Occurred " + e.getMessage());
@@ -235,7 +210,7 @@ public class ledgerApp {
                 LocalDate transactionDate = LocalDate.parse(ledger.getDate(), formatter);
 
                 if (transactionDate.getYear() == today.getYear()) {
-                    System.out.println(ledger.getDate() + " | " + ledger.getTime() + " | " + ledger.getDescription() + " | " + ledger.getVendor() + " | " + ledger.getAmount());
+                    System.out.println(Ledger.transactionFormater(ledger));
                 }
             } catch (Exception e) {
                 System.out.println("An Unexpected Error Has Occurred " + e.getMessage());
@@ -256,7 +231,7 @@ public class ledgerApp {
 
                 if ((transactionDate.isEqual(startYear) || transactionDate.isAfter(startYear)) &&
                         (transactionDate.isEqual(endYear) || transactionDate.isBefore(endYear))) {
-                    System.out.println(ledger.getDate() + " | " + ledger.getTime() + " | " + ledger.getDescription() + " | " + ledger.getVendor() + " | " + ledger.getAmount());
+                    System.out.println(Ledger.transactionFormater(ledger));
                 }
             } catch (Exception e) {
                 System.out.println("An Unexpected Error Has Occurred " + e.getMessage());
@@ -270,7 +245,7 @@ public class ledgerApp {
         String vendorName = input.nextLine().trim().toUpperCase();
         for (Ledger ledger : transactions) {
             if (ledger.getVendor().toUpperCase().equals(vendorName)) {
-                System.out.println(ledger.getDate() + " | " + ledger.getTime() + " | " + ledger.getDescription() + " | " + ledger.getVendor() + " | " + ledger.getAmount());
+                System.out.println(Ledger.transactionFormater(ledger));
             }
         }
         System.out.println();

@@ -15,7 +15,14 @@ public class Ledger {
     private String vendor;
     private double amount;
 
-    public void saveTransaction(String description, String vendor, double amount){
+    public static String transactionFormater(Ledger ledger) {
+       return String.format(ledger.getDate() + " | " + ledger.getTime() + " | " + ledger.getDescription() + " | " + ledger.getVendor() + " | " + ledger.getAmount());
+
+    }
+
+
+
+    public void saveTransaction(String description, String vendor, double amount) {
         LocalDateTime now = LocalDateTime.now();
         String date = now.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         String time = now.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
@@ -25,11 +32,12 @@ public class Ledger {
         try (BufferedWriter bufWriter = new BufferedWriter(new FileWriter("src/main/resources/transactions.csv", true))) {
             bufWriter.write(transactionLine);
             bufWriter.newLine();
-            System.out.println("Deposited Successfully\n");
+            System.out.println("Summited Successfully\n");
         } catch (IOException e) {
             System.out.println("An Unexpected Error Has Occurred " + e.getMessage());
         }
     }
+
     public static List<Ledger> parseTransactions() {
         List<Ledger> transactions = new ArrayList<>();
         try (BufferedReader bufReader = new BufferedReader(new FileReader("src/main/resources/transactions.csv"))) {
@@ -63,6 +71,7 @@ public class Ledger {
         this.vendor = vendor;
         this.amount = amount;
     }
+
     public String getDate() {
         return date;
     }
